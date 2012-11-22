@@ -18,10 +18,18 @@ public class UpDownOperatorParser extends AbstractXMLObjectParser {
         return UP_DOWN_OPERATOR;
     }
 
-    private Scalable[] getArgs(final XMLObject list) throws XMLParseException {
-        Scalable[] args = new Scalable[list.getChildCount()];
+    private Parameter[] getArgs(final XMLObject list) throws XMLParseException {
+        if( list == null) return null;  // whdc
+
+        Parameter[] args = new Parameter[list.getChildCount()];
         for (int k = 0; k < list.getChildCount(); ++k) {
             final Object child = list.getChild(k);
+            if (child instanceof Parameter) {
+                args[k] = (Parameter) child;
+            } else {
+                throw new XMLParseException( "whdc: I don't know what to do with these types");
+            }
+            /*
             if (child instanceof Parameter) {
                 args[k] = new Scalable.Default((Parameter) child);
             } else if (child instanceof Scalable) {
@@ -59,6 +67,7 @@ public class UpDownOperatorParser extends AbstractXMLObjectParser {
                     };
                 }
             }
+            */
 
         }
         return args;
@@ -72,8 +81,8 @@ public class UpDownOperatorParser extends AbstractXMLObjectParser {
 
         final CoercionMode mode = CoercionMode.parseMode(xo);
 
-        final Scalable[] upArgs = getArgs(xo.getChild(UP));
-        final Scalable[] dnArgs = getArgs(xo.getChild(DOWN));
+        final Parameter[] upArgs = getArgs(xo.getChild(UP));
+        final Parameter[] dnArgs = getArgs(xo.getChild(DOWN));
 
         return new UpDownOperator(upArgs, dnArgs, scaleFactor, weight, mode);
     }
@@ -108,8 +117,10 @@ public class UpDownOperatorParser extends AbstractXMLObjectParser {
             AttributeRule.newBooleanRule(CoercableMCMCOperator.AUTO_OPTIMIZE, true),
 
             // Allow an arbitrary number of Parameters or Scalable in up or down
-            new ElementRule(UP, ee, 1, Integer.MAX_VALUE),
-            new ElementRule(DOWN, ee, 1, Integer.MAX_VALUE),
+            // new ElementRule(UP, ee, 1, Integer.MAX_VALUE),
+            // new ElementRule(DOWN, ee, 1, Integer.MAX_VALUE),
+            new ElementRule(UP, ee, 0, Integer.MAX_VALUE), // whdc
+            new ElementRule(DOWN, ee, 0, Integer.MAX_VALUE), // whdc
     };
 
 }

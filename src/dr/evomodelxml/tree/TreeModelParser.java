@@ -52,6 +52,8 @@ public class TreeModelParser extends AbstractXMLObjectParser {
     public static final String MULTIVARIATE_TRAIT = "traitDimension";
     public static final String INITIAL_VALUE = "initialValue";
 
+    public static final String PARENT = "parent";  // whdc
+
     public static final String ROOT_NODE = "rootNode";
     public static final String INTERNAL_NODES = "internalNodes";
     public static final String LEAF_NODES = "leafNodes";
@@ -128,6 +130,8 @@ public class TreeModelParser extends AbstractXMLObjectParser {
 
                 } else if (cxo.getName().equals(LEAF_HEIGHT)) {
 
+                    boolean parent = cxo.getAttribute(PARENT, false);
+
                     String taxonName;
                     if (cxo.hasAttribute(TAXON)) {
                         taxonName = cxo.getStringAttribute(TAXON);
@@ -140,32 +144,36 @@ public class TreeModelParser extends AbstractXMLObjectParser {
                         throw new XMLParseException("taxon " + taxonName + " not found for leafHeight element in treeModel element");
                     }
                     NodeRef node = treeModel.getExternalNode(index);
+                    if( parent) node = treeModel.getParent( node);  // whdc
 
                     Parameter newParameter = treeModel.getLeafHeightParameter(node);
 
                     ParameterParser.replaceParameter(cxo, newParameter);
 
-                    Taxon taxon = treeModel.getTaxon(index);
-                    Date date = taxon.getDate();
-                    if (date != null) {
-                        double precision = date.getPrecision();
-                        if (precision > 0.0) {
-                            // taxon date not specified to exact value so add appropriate bounds
-                            double upper = Taxon.getHeightFromDate(date);
-                            double lower = Taxon.getHeightFromDate(date);
-                            if (date.isBackwards()) {
-                                upper += precision;
-                            } else {
-                                lower -= precision;
+
+                    if( !parent) {  // whdc
+                        Taxon taxon = treeModel.getTaxon(index);
+                        Date date = taxon.getDate();
+                        if (date != null) {
+                            double precision = date.getPrecision();
+                            if (precision > 0.0) {
+                                // taxon date not specified to exact value so add appropriate bounds
+                                double upper = Taxon.getHeightFromDate(date);
+                                double lower = Taxon.getHeightFromDate(date);
+                                if (date.isBackwards()) {
+                                    upper += precision;
+                                } else {
+                                    lower -= precision;
+                                }
+
+                                // set the bounds for the given precision
+                                newParameter.addBounds(new Parameter.DefaultBounds(upper, lower, 1));
+
+                                // set the initial value to be mid-point
+                                newParameter.setParameterValue(0, (upper + lower) / 2);
                             }
-
-                            // set the bounds for the given precision
-                            newParameter.addBounds(new Parameter.DefaultBounds(upper, lower, 1));
-
-                            // set the initial value to be mid-point
-                            newParameter.setParameterValue(0, (upper + lower) / 2);
                         }
-                    }
+                    }  // whdc
                 } else if (cxo.getName().equals(NODE_HEIGHTS)) {
 
                     boolean rootNode = cxo.getAttribute(ROOT_NODE, false);

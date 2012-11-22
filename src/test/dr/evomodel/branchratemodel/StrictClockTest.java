@@ -100,8 +100,12 @@ public class StrictClockTest extends TraceCorrelationAssert {
         schedule.addOperator(operator);
 
         Parameter allInternalHeights = treeModel.createNodeHeightsParameter(true, true, false);
-        operator = new UpDownOperator(new Scalable[]{new Scalable.Default(rateParameter)},
-                new Scalable[] {new Scalable.Default(allInternalHeights)}, 0.75, 3.0, CoercionMode.COERCION_ON);
+        // operator = new UpDownOperator(new Scalable[]{new Scalable.Default(rateParameter)},
+                // new Scalable[] {new Scalable.Default(allInternalHeights)}, 0.75, 3.0, CoercionMode.COERCION_ON);
+        // whdc
+        operator = new UpDownOperator(new Parameter[]{rateParameter},
+                new Parameter[] {allInternalHeights},
+                0.75, 3.0, CoercionMode.COERCION_ON);
         schedule.addOperator(operator);
 
         operator = new ScaleOperator(popSize, 0.75);
@@ -134,7 +138,7 @@ public class StrictClockTest extends TraceCorrelationAssert {
         schedule.addOperator(operator);
 
         //CompoundLikelihood
-        List<Likelihood> likelihoods = new ArrayList<Likelihood>();        
+        List<Likelihood> likelihoods = new ArrayList<Likelihood>();
         likelihoods.add(coalescent);
         Likelihood prior = new CompoundLikelihood(0, likelihoods);
         prior.setId(CompoundLikelihoodParser.PRIOR);
@@ -214,7 +218,7 @@ public class StrictClockTest extends TraceCorrelationAssert {
         assertExpectation(HKYParser.KAPPA, kappaStats, 18.2782);
 
         TraceCorrelation rateStats = traceList.getCorrelationStatistics(traceList.getTraceIndex(StrictClockBranchRates.RATE));
-        assertExpectation(StrictClockBranchRates.RATE, rateStats, 8.04835E-4);        
+        assertExpectation(StrictClockBranchRates.RATE, rateStats, 8.04835E-4);
 
         TraceCorrelation popStats = traceList.getCorrelationStatistics(traceList.getTraceIndex(ConstantPopulationModelParser.POPULATION_SIZE));
         assertExpectation(ConstantPopulationModelParser.POPULATION_SIZE, popStats, 37.3762);

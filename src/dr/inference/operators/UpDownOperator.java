@@ -26,14 +26,16 @@
 package dr.inference.operators;
 
 import dr.math.MathUtils;
+import dr.inference.model.Bounds;
+import dr.inference.model.Parameter;
 
 public class UpDownOperator extends AbstractCoercableOperator {
 
-    private Scalable[] upParameter = null;
-    private Scalable[] downParameter = null;
+    private Parameter[] upParameter = null;
+    private Parameter[] downParameter = null;
     private double scaleFactor;
 
-    public UpDownOperator(Scalable[] upParameter, Scalable[] downParameter,
+    public UpDownOperator(Parameter[] upParameter, Parameter[] downParameter,
                           double scale, double weight, CoercionMode mode) {
 
         super(mode);
@@ -61,9 +63,12 @@ public class UpDownOperator extends AbstractCoercableOperator {
      */
     public final double doOperation() throws OperatorFailedException {
 
+        // whdc: split scale(...) into two methods
+
         final double scale = (scaleFactor + (MathUtils.nextDouble() * ((1.0 / scaleFactor) - scaleFactor)));
         int goingUp = 0, goingDown = 0;
 
+/*
         if( upParameter != null ) {
             for( Scalable up : upParameter ) {
                 goingUp += up.scale(scale, -1);
@@ -73,6 +78,57 @@ public class UpDownOperator extends AbstractCoercableOperator {
         if( downParameter != null ) {
             for( Scalable dn : downParameter ) {
                 goingDown += dn.scale(1.0 / scale, -1);
+            }
+        }
+*/
+        if( upParameter != null ) {
+            for( Parameter up : upParameter ) {
+                final int dimension = up.getDimension();
+
+                for (int i = 0; i < dimension; ++i) {
+                    up.setParameterValue(i, up.getParameterValue(i) * scale);
+                }
+
+                goingUp += dimension;
+            }
+        }
+
+        if( downParameter != null ) {
+            for( Parameter dn : downParameter ) {
+                final int dimension = dn.getDimension();
+
+                for (int i = 0; i < dimension; ++i) {
+                    dn.setParameterValue(i, dn.getParameterValue(i) * scale);
+                }
+
+                goingDown += dimension;
+            }
+        }
+
+        if( upParameter != null ) {
+            for( Parameter up : upParameter ) {
+                final int dimension = up.getDimension();
+                final Bounds<Double> bounds = up.getBounds();
+                for (int i = 0; i < dimension; i++) {
+                    final double value = up.getParameterValue(i);
+                    if (value < bounds.getLowerLimit(i) || value > bounds.getUpperLimit(i)) {
+                        throw new OperatorFailedException("proposed value outside boundaries");
+                    }
+                }
+
+            }
+        }
+
+        if( downParameter != null ) {
+            for( Parameter dn : downParameter ) {
+                final int dimension = dn.getDimension();
+                final Bounds<Double> bounds = dn.getBounds();
+                for (int i = 0; i < dimension; i++) {
+                    final double value = dn.getParameterValue(i);
+                    if (value < bounds.getLowerLimit(i) || value > bounds.getUpperLimit(i)) {
+                        throw new OperatorFailedException("proposed value outside boundaries");
+                    }
+                }
             }
         }
 
@@ -96,15 +152,15 @@ public class UpDownOperator extends AbstractCoercableOperator {
         String name = "";
         if( upParameter != null ) {
             name = "up:";
-            for( Scalable up : upParameter ) {
-                name = name + up.getName() + " ";
+            for( Parameter up : upParameter ) {
+                name = name + up.getParameterName() + " ";
             }
         }
 
         if( downParameter != null ) {
             name += "down:";
-            for( Scalable dn : downParameter ) {
-                name = name + dn.getName() + " ";
+            for( Parameter dn : downParameter ) {
+                name = name + dn.getParameterName() + " ";
             }
         }
         return name;

@@ -109,8 +109,12 @@ public class PMDTestProblem extends TraceCorrelationAssert {
         schedule.addOperator(operator);
 
         Parameter allInternalHeights = treeModel.createNodeHeightsParameter(true, true, false);
-        operator = new UpDownOperator(new Scalable[]{new Scalable.Default(rateParameter)},
-                new Scalable[] {new Scalable.Default(allInternalHeights)}, 0.75, 3.0, CoercionMode.COERCION_ON);
+        //whdc
+        //operator = new UpDownOperator(new Scalable[]{new Scalable.Default(rateParameter)},
+                //new Scalable[] {new Scalable.Default(allInternalHeights)}, 0.75, 3.0, CoercionMode.COERCION_ON);
+        operator = new UpDownOperator(new Parameter[]{rateParameter},
+                new Parameter[] {allInternalHeights},
+                0.75, 3.0, CoercionMode.COERCION_ON);
         schedule.addOperator(operator);
 
         operator = new ScaleOperator(popSize, 0.75);

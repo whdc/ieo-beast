@@ -122,7 +122,7 @@ public class UncorrelatedRelaxedClockTest extends TraceCorrelationAssert {
 
     public void testExponential() throws Exception {
         meanParam = new Parameter.Default(1.0);
-        meanParam.setId(DistributionModelParser.MEAN); 
+        meanParam.setId(DistributionModelParser.MEAN);
         stdevParam = null;
         ParametricDistributionModel distributionModel = new ExponentialDistributionModel(meanParam); // offset = 0
 
@@ -174,11 +174,11 @@ public class UncorrelatedRelaxedClockTest extends TraceCorrelationAssert {
         CoalescentLikelihood coalescent = new CoalescentLikelihood(treeModel, null, new ArrayList<TaxonList>(), constantModel);
         coalescent.setId("coalescent");
 
-        // clock model        
+        // clock model
         Parameter rateCategoryParameter = new Parameter.Default(32);
-        rateCategoryParameter.setId(DiscretizedBranchRates.BRANCH_RATES); 
+        rateCategoryParameter.setId(DiscretizedBranchRates.BRANCH_RATES);
 
-        DiscretizedBranchRates branchRateModel = new DiscretizedBranchRates(treeModel, rateCategoryParameter, 
+        DiscretizedBranchRates branchRateModel = new DiscretizedBranchRates(treeModel, rateCategoryParameter,
                 distributionModel, 1, false, Double.NaN);
 
         RateStatistic meanRate = new RateStatistic("meanRate", treeModel, branchRateModel, true, true, RateStatisticParser.MEAN);
@@ -223,8 +223,11 @@ public class UncorrelatedRelaxedClockTest extends TraceCorrelationAssert {
         }
 
         Parameter allInternalHeights = treeModel.createNodeHeightsParameter(true, true, false);
-        operator = new UpDownOperator(new Scalable[]{new Scalable.Default(meanParam)},
-                new Scalable[] {new Scalable.Default(allInternalHeights)}, 0.75, 3.0, CoercionMode.COERCION_ON);
+        // whdc
+        //operator = new UpDownOperator(new Scalable[]{new Scalable.Default(meanParam)},
+                //new Scalable[] {new Scalable.Default(allInternalHeights)}, 0.75, 3.0, CoercionMode.COERCION_ON);
+        operator = new UpDownOperator(new Parameter[]{meanParam},
+                new Parameter[] {allInternalHeights}, 0.75, 3.0, CoercionMode.COERCION_ON);
         schedule.addOperator(operator);
 
         operator = new SwapOperator(rateCategoryParameter, 10);

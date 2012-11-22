@@ -78,6 +78,32 @@ public interface Scalable {
             return dimension;
         }
 
+        // whdc: split scale(...) into two separate methods.
+
+        public int scaleDo(double factor, int nDims) throws OperatorFailedException {
+            assert nDims <= 0;
+            final int dimension = parameter.getDimension();
+
+            for (int i = 0; i < dimension; ++i) {
+                parameter.setParameterValue(i, parameter.getParameterValue(i) * factor);
+            }
+
+            return dimension;
+        }
+
+        public int scaleCheck(double factor, int nDims) throws OperatorFailedException {
+            final int dimension = parameter.getDimension();
+            final Bounds<Double> bounds = parameter.getBounds();
+
+            for (int i = 0; i < dimension; i++) {
+                final double value = parameter.getParameterValue(i);
+                if (value < bounds.getLowerLimit(i) || value > bounds.getUpperLimit(i)) {
+                    throw new OperatorFailedException("proposed value outside boundaries");
+                }
+            }
+            return dimension;
+        }
+
         public String getName() {
             return parameter.getParameterName();
         }
