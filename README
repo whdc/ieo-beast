@@ -4,7 +4,22 @@ It was obtained via:
 
   svn checkout http://beast-mcmc.googlecode.com/svn/trunk/ beast-mcmc-read-only
 
+For reference, running "svn info" yields:
+
+  Path: .
+  URL: http://beast-mcmc.googlecode.com/svn/trunk
+  Repository Root: http://beast-mcmc.googlecode.com/svn
+  Repository UUID: ca793f91-a31e-0410-b540-2769d408b6a1
+  Revision: 5252
+  Node Kind: directory
+  Schedule: normal
+  Last Changed Author: rambaut
+  Last Changed Rev: 5252
+  Last Changed Date: 2012-11-21 08:11:24 -0800 (Wed, 21 Nov 2012)
+
 It is now maintained as a git repository.
+
+---
 
 I compiled and installed it (on Linux) in this manner:
 
@@ -25,3 +40,4 @@ I compiled and installed it (on Linux) in this manner:
 (4) Put $BEAST/release/Linux/scripts in the path.
 
   export PATH=$BEAST/release/Linux/scripts:$PATH
+
