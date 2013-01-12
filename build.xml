@@ -49,9 +49,11 @@
         <mkdir dir="${build}"/>
 
         <!-- Compile the java code from ${src} into ${build} /bin -->
-        <javac source="${JDK_VERSION}" target="${JDK_VERSION}" srcdir="${src}" destdir="${build}" classpathref="classpath"
+        <!--
                debug="true"
                debuglevel="lines,vars,source"
+        -->
+        <javac source="${JDK_VERSION}" target="${JDK_VERSION}" srcdir="${src}" destdir="${build}" classpathref="classpath"
                fork="true"
                memoryinitialsize="256m"
                memorymaximumsize="1024m">

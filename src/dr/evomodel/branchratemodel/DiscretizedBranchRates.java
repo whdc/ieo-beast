@@ -27,6 +27,7 @@ package dr.evomodel.branchratemodel;
 
 import dr.evolution.tree.NodeRef;
 import dr.evolution.tree.Tree;
+import dr.evolution.util.Taxon;
 import dr.evomodel.tree.TreeModel;
 import dr.evomodel.tree.TreeParameterModel;
 import dr.evomodelxml.branchratemodel.DiscretizedBranchRatesParser;
@@ -186,6 +187,14 @@ public class DiscretizedBranchRates extends AbstractBranchRateModel {
         assert !tree.isRoot(node) : "root node doesn't have a rate!";
 
         int rateCategory = (int) Math.round(rateCategories.getNodeValue(tree, node));
+
+        // whdc: Do not sample for the rate of branches leading up
+        // to adventitious leaves.  I would return zero, but that
+        // cause the tree likelihood to return NaN.
+        Taxon taxon = tree.getNodeTaxon( node);
+        if( taxon != null && taxon.getAdventitious()) {
+          return 1.;
+        }
 
         //System.out.println(rates[rateCategory] + "\t"  + rateCategory);
         return rates[rateCategory] * scaleFactor;

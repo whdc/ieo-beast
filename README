@@ -1,0 +1,27 @@
+This repository contains BEAST source code, modified for the purposes
+of the IE-ORIGINS project at the Department of Linguistics, UC Berkeley.
+It was obtained via:
+
+  svn checkout http://beast-mcmc.googlecode.com/svn/trunk/ beast-mcmc-read-only
+
+It is now maintained as a git repository.
+
+I compiled and installed it (on Linux) in this manner:
+
+(1) Run ant to build everything.
+
+  ant
+
+(2) Set the root of the local repository to $BEAST.  Also set $BEAST_LIB.
+
+  export BEAST=/path/to/repo
+  export BEAST_LIB=$BEAST/lib
+
+(3) Link beast.jar and beuti.jar into $BEAST_LIB.
+
+  cd $BEAST_LIB
+  ln -s ../build/dist/*.jar .
+
+(4) Put $BEAST/release/Linux/scripts in the path.
+
+  export PATH=$BEAST/release/Linux/scripts:$PATH

@@ -45,6 +45,11 @@ public class Taxon implements Attributable, Identifiable, Comparable<Taxon> {
         setId(id);
     }
 
+    public Taxon(String id, boolean adventitious) {
+        setId(id);
+        setAdventitious( adventitious);
+    }
+
     /**
      * Sets a date for this taxon.
      */
@@ -145,6 +150,7 @@ public class Taxon implements Attributable, Identifiable, Comparable<Taxon> {
     // **************************************************************
 
     protected String id = null;
+    protected boolean adventitious = false;
 
     /**
      * @return the id.
@@ -158,6 +164,16 @@ public class Taxon implements Attributable, Identifiable, Comparable<Taxon> {
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+
+    // whdc: adventitous leaves
+
+    public boolean getAdventitious() {
+        return adventitious;
+    }
+    public void setAdventitious(boolean adventitious) {
+        this.adventitious = adventitious;
     }
 
     public String toString() { return getId(); }

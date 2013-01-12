@@ -1,0 +1,5 @@
+.svn
+build/
+lib/beast.jar
+lib/beauti.jar
+*.swp

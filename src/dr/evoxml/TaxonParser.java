@@ -40,13 +40,18 @@ public class TaxonParser extends AbstractXMLObjectParser {
 
     public final static String TAXON = "taxon";
 
+    public static final String ADVENTITIOUS = "adventitious";
+
     public String getParserName() {
         return TAXON;
     }
 
     public Object parseXMLObject(XMLObject xo) throws XMLParseException {
 
-        Taxon taxon = new Taxon(xo.getStringAttribute(dr.xml.XMLParser.ID));
+        Taxon taxon = new Taxon(
+          xo.getStringAttribute(dr.xml.XMLParser.ID),
+          xo.getAttribute( ADVENTITIOUS, false)
+        );
 
         for (int i = 0; i < xo.getChildCount(); i++) {
             Object child = xo.getChild(i);
