@@ -26,7 +26,8 @@
 package dr.evomodelxml.speciation;
 
 import dr.evolution.util.Units;
-import dr.evomodel.speciation.BirthDeathGernhard08Model;
+// import dr.evomodel.speciation.BirthDeathGernhard08Model;
+import dr.evomodel.speciation.YuleModel;
 import dr.evoxml.util.XMLUnits;
 import dr.inference.model.Parameter;
 import dr.xml.*;
@@ -52,13 +53,11 @@ public class YuleModelParser extends AbstractXMLObjectParser {
 
         final XMLObject cxo = xo.getChild(BIRTH_RATE);
 
-        final boolean conditonalOnRoot =  xo.getAttribute(BirthDeathModelParser.CONDITIONAL_ON_ROOT, false);
         final Parameter brParameter = (Parameter) cxo.getChild(Parameter.class);
 
         Logger.getLogger("dr.evomodel").info("Using Yule prior on tree");
 
-        return new BirthDeathGernhard08Model(xo.getId(), brParameter, null, null,
-                BirthDeathGernhard08Model.TreeType.UNSCALED, units, conditonalOnRoot);
+        return new YuleModel(brParameter, units);
     }
 
     //************************************************************************
@@ -70,7 +69,7 @@ public class YuleModelParser extends AbstractXMLObjectParser {
     }
 
     public Class getReturnType() {
-        return BirthDeathGernhard08Model.class;
+        return YuleModel.class;
     }
 
     public XMLSyntaxRule[] getSyntaxRules() {
@@ -78,7 +77,7 @@ public class YuleModelParser extends AbstractXMLObjectParser {
     }
 
     private final XMLSyntaxRule[] rules = {
-            AttributeRule.newBooleanRule(BirthDeathModelParser.CONDITIONAL_ON_ROOT, true),
+            //AttributeRule.newBooleanRule(YuleParser.CONDITIONAL_ON_ROOT, true),
             new ElementRule(BIRTH_RATE,
                     new XMLSyntaxRule[]{new ElementRule(Parameter.class)}),
             XMLUnits.SYNTAX_RULES[0]
