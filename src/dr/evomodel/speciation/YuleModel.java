@@ -87,7 +87,7 @@ public class YuleModel extends UltrametricSpeciationModel {
         double logP = 0;
 
         if (tree.isRoot(node)) {
-            logP += -2 * lambda * nodeHeight;
+            logP += -2. * lambda * nodeHeight;
         } else if (tree.getChildCount(node) == 0) {
             Taxon taxon = tree.getNodeTaxon( node);
             boolean isAdventitious = taxon != null && taxon.getAdventitious();
@@ -113,7 +113,7 @@ public class YuleModel extends UltrametricSpeciationModel {
     }
 
     public boolean includeExternalNodesInLikelihoodCalculation() {
-        return false;
+        return true;
     }
 
     // **************************************************************

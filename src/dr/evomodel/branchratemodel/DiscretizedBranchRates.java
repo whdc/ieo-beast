@@ -193,7 +193,7 @@ public class DiscretizedBranchRates extends AbstractBranchRateModel {
         // cause the tree likelihood to return NaN.
         Taxon taxon = tree.getNodeTaxon( node);
         if( taxon != null && taxon.getAdventitious()) {
-          return 0.00001;
+          return 0.0000001;
         }
 
         //System.out.println(rates[rateCategory] + "\t"  + rateCategory);
