@@ -148,6 +148,14 @@ public class ColouredOperator implements CoercableMCMCOperator {
         innerOperator.setWeight(w);
     }
 
+    public final int getStartIter() {
+        return innerOperator.getStartIter();
+    }
+
+    public final void setStartIter( int i) {
+        innerOperator.setStartIter( i);
+    }
+
     public final void accept(double deviation) {
         innerOperator.accept(deviation);
     }

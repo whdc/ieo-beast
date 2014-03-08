@@ -35,6 +35,7 @@ package dr.inference.operators;
 public interface MCMCOperator {
 
     public static final String WEIGHT = "weight";
+    public static final String START_ITER = "startIter";
 
 // This attribute is now called AUTO_OPTIMIZE and is in CoercableMCMCOperator
 //	public static final String ADAPT = "adapt";
@@ -150,6 +151,17 @@ public interface MCMCOperator {
      * @param weight the relative weight of this parameter - should be positive.
      */
     void setWeight(double weight);
+
+
+    /**
+     * @return the iteration at which this operator starts going.
+     */
+    int getStartIter();
+
+    /**
+     * sets the iteration at which this operator starts going.
+     */
+    void setStartIter( int startIter);
 
     /**
      * @return the name of this operator

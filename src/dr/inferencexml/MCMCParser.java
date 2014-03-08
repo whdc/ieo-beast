@@ -187,6 +187,7 @@ public class MCMCParser extends AbstractXMLObjectParser {
     public static final String TEMPERATURE = "temperature";
     public static final String SPAWN = "spawn";
     public static final String OPERATOR_ANALYSIS = "operatorAnalysis";
+    public static final String START_ITER = "startIter";
 
 
 }

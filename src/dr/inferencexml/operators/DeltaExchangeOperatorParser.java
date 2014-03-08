@@ -56,8 +56,18 @@ public class DeltaExchangeOperatorParser extends AbstractXMLObjectParser {
             throw new XMLParseException("parameter weights have the same length as parameter");
         }
 
+        MCMCOperator operator = new DeltaExchangeOperator(parameter, parameterWeights, delta, weight, isIntegerOperator, mode);
 
-        return new DeltaExchangeOperator(parameter, parameterWeights, delta, weight, isIntegerOperator, mode);
+        // whdc: grab startIter if it exists.
+        int startIter = 0;
+        try {
+          startIter = xo.getIntegerAttribute(MCMCOperator.START_ITER);
+        } catch( XMLParseException e) {
+          // no big deal
+        }
+        operator.setStartIter(startIter);
+
+        return operator;
     }
 
     //************************************************************************

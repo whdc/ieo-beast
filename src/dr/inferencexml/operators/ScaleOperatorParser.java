@@ -57,6 +57,16 @@ public class ScaleOperatorParser extends AbstractXMLObjectParser {
                 mode, indicator, indicatorOnProb,
                 scaleAllInd);
         operator.setWeight(weight);
+
+        // whdc: grab startIter if it exists.
+        int startIter = 0;
+        try {
+          startIter = xo.getIntegerAttribute(MCMCOperator.START_ITER);
+        } catch( XMLParseException e) {
+          // no big deal
+        }
+        operator.setStartIter(startIter);
+
         return operator;
     }
 

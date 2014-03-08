@@ -34,6 +34,14 @@ public abstract class SimpleOperator implements MCMCOperator {
         } else throw new IllegalArgumentException("Weight must be a positive real. (called with " + w + ")");
     }
 
+    public final int getStartIter() {
+        return startIter;
+    }
+
+    public final void setStartIter( int i) {
+        startIter = i;
+    }
+
     public void accept(double deviation) {
         lastDeviation = deviation;
 
@@ -131,6 +139,7 @@ public abstract class SimpleOperator implements MCMCOperator {
     private int spanCount = 0;
 
     private double weight = 1.0;
+    private int startIter = 0;
     private int accepted = 0;
     private int rejected = 0;
     private double sumDeviation = 0.0;

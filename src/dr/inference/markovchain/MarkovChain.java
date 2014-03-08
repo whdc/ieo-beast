@@ -173,6 +173,12 @@ public final class MarkovChain {
             final int op = schedule.getNextOperatorIndex();
             final MCMCOperator mcmcOperator = schedule.getOperator(op);
 
+            // whdc: skip operator if it's not ready to start.
+            if( currentState < mcmcOperator.getStartIter()) {
+              mcmcOperator.setRejectCount( 1 + mcmcOperator.getRejectCount());
+              continue;
+            }
+
             double oldScore = currentScore;
 
             // assert Profiler.startProfile("Store");

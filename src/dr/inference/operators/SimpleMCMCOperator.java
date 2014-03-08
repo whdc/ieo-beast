@@ -76,6 +76,14 @@ public abstract class SimpleMCMCOperator implements MCMCOperator {
         }
     }
 
+    public final int getStartIter() {
+        return startIter;
+    }
+
+    public final void setStartIter( int i) {
+        startIter = i;
+    }
+
     public void accept(double deviation) {
         lastDeviation = deviation;
 
@@ -218,6 +226,7 @@ public abstract class SimpleMCMCOperator implements MCMCOperator {
     public abstract double doOperation() throws OperatorFailedException;
 
     private double weight = 1.0;
+    private int startIter = 0;
     private int acceptCount = 0;
     private int rejectCount = 0;
 
