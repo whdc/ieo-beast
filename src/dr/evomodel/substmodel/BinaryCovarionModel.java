@@ -17,10 +17,10 @@ import dr.inference.model.Parameter;
  *         <p/>
  *         then the (unnormalized) instantaneous rate matrix (unnormalized Q) should be
  *         <p/>
- *         [ -(a*p1)-s ,   a*p1    ,    s   ,   0   ]
- *         [   a*p0    , -(a*p0)-s ,    0   ,   s   ]
- *         [    s      ,     0     ,  -p1-s ,  p1   ]
- *         [    0      ,     s     ,    p0  , -p0-s ]
+ *         [    . , a*p1 ,  s*f1 ,     0 ]
+ *         [ a*p0 ,    . ,     0 ,  s*f1 ]
+ *         [ s*f0 ,    0 ,     . ,    p1 ]
+ *         [    0 , s*f0 ,    p0 ,     . ]
  */
 public class BinaryCovarionModel extends AbstractCovarionModel {
 
@@ -64,19 +64,19 @@ public class BinaryCovarionModel extends AbstractCovarionModel {
         assert Math.abs(1.0 - p0 - p1) < 1e-8;
 
         unnormalizedQ[0][1] = a * p1;
-        unnormalizedQ[0][2] = s;
+        unnormalizedQ[0][2] = s * f1;
         unnormalizedQ[0][3] = 0.0;
 
         unnormalizedQ[1][0] = a * p0;
         unnormalizedQ[1][2] = 0.0;
-        unnormalizedQ[1][3] = s;
+        unnormalizedQ[1][3] = s * f1;
 
-        unnormalizedQ[2][0] = s;
+        unnormalizedQ[2][0] = s * f0;
         unnormalizedQ[2][1] = 0.0;
         unnormalizedQ[2][3] = p1;
 
         unnormalizedQ[3][0] = 0.0;
-        unnormalizedQ[3][1] = s;
+        unnormalizedQ[3][1] = s * f0;
         unnormalizedQ[3][2] = p0;
     }
 
